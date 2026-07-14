@@ -9,12 +9,12 @@ export default function LandingPage() {
 
         <nav className='flex items-center gap-3'>
           <Button variant='outline'>
-            <Link href='/'>Sign In</Link>
+            <Link href='/login'>Sign In</Link>
             
           </Button>
           
           <Button variant='default'>
-            <Link href='/'>Sign Up</Link>
+            <Link href='/register'>Sign Up</Link>
           </Button>
         </nav>
       </header>
@@ -28,7 +28,7 @@ export default function LandingPage() {
         <p className='text-muted-foreground max-w-lg leading-relaxed mb-10'>Get comprehensive insights and data analysis for any URL. Fast, reliable, and tailored for modern web developers.</p>
 
         <Button variant='link' className='font-semibold text-base hover:underline'>
-          <Link href='/'>Go to Dashboard →</Link>
+          <Link href='/dashboard'>Go to Dashboard →</Link>
         </Button>
       </main>
 

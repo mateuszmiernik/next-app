@@ -29,7 +29,7 @@ export default function LoginPage() {
                 id="email" 
                 type="email" 
                 placeholder="name@example.com" 
-                className="bg-background border-border text-foreground focus-visible:ring-primary"
+                className="bg-background border-border text-foreground focus:bg-background focus-visible:ring-primary"
                 required 
               />
             </div>

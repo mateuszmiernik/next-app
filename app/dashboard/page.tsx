@@ -14,7 +14,7 @@ export default function DashboardPage() {
                     <p className="text-xs text-muted-foreground">Welcome back to your analysis panel</p>
                 </div>
 
-                <Button variant="outline" size="sm" asChild>
+                <Button variant="outline" size="sm">
                     <Link href="/">← Back to Home</Link>
                 </Button>
             </header>

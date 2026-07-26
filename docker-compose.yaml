@@ -1,0 +1,16 @@
+services:
+  db:
+    image: postgres:18
+    container_name: next-app-postgres
+    restart: always
+    environment:
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: mysecretpassword
+      POSTGRES_DB: next_app_db
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+volumes:
+  postgres_data:

@@ -5,8 +5,8 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { signUp } from '@/lib/auth-client';
-import { useState } from "react"; 
-import { useRouter } from "next/navigation"; 
+import { useState } from "react";
+import { useRouter } from "next/navigation";
 
 
 export default function RegisterPage() {
@@ -23,28 +23,36 @@ export default function RegisterPage() {
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
 
+        setError("");
+
+        if (password == !confirmPassword) {
+            setError("Passwords do not match")
+            return;
+        }
+
+        setPending(true);
+
         await signUp.email({
             email: email,
             password: password,
             name: name
         },
-        {
-            onSuccess: () => {
-                console.log('done')
-                router.push('/dashboard');
-            },
-            onError: (ctx) => {
-                setError(ctx.error.message || "Something went wrong. Please try again.");
+            {
+                onSuccess: () => {
+                    console.log('done')
+                    router.push('/dashboard');
+                },
+                onError: (ctx) => {
+                    setError(ctx.error.message || "Something went wrong. Please try again.");
+                    setPending(false);
+                }
             }
-        }
-    )
+        )
     }
 
     return (
         <div className="min-h-screen flex items-center justify-center p-4 bg-background">
-
             <Card className="w-full max-w-md bg-card border-border shadow-2xl">
-
 
                 <CardHeader className="space-y-1 text-center">
                     <CardTitle className="text-2xl font-bold tracking-tight text-foreground">
@@ -56,6 +64,13 @@ export default function RegisterPage() {
                 </CardHeader>
 
                 <CardContent>
+                    {error && (
+                        <div className="mb-4 p-3 rounded-md bg-destructive/15 text-destructive text-sm text-center font-medium border border-destructive/20">
+                            {error}
+                        </div>
+                        )
+                    }
+
                     <form onSubmit={handleSubmit} className="space-y-4">
                         <div className="space-y-2">
                             <Label htmlFor="name" className="text-sm font-medium text-foreground">
@@ -117,8 +132,8 @@ export default function RegisterPage() {
                             />
                         </div>
 
-                        <Button type="submit" className="w-full mt-2 hover:shadow-[0_0_15px_rgba(244,63,94,0.4)] transition-all duration-300">
-                            Sign Up
+                        <Button type="submit" disabled={pending} className="w-full mt-2 hover:shadow-[0_0_15px_rgba(244,63,94,0.4)] transition-all duration-300">
+                            {pending ? "Creating account..." : "Sign Up"}
                         </Button>
                     </form>
                 </CardContent>

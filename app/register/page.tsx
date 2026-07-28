@@ -1,10 +1,45 @@
+'use client'
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
+import { signUp } from '@/lib/auth-client';
+import { useState } from "react"; 
+import { useRouter } from "next/navigation"; 
+
 
 export default function RegisterPage() {
+    const [name, setName] = useState("");
+    const [email, setEmail] = useState("");
+    const [password, setPassword] = useState("");
+    const [confirmPassword, setConfirmPassword] = useState("");
+    const [error, setError] = useState("");
+    const [pending, setPending] = useState(false);
+
+    const router = useRouter();
+
+
+    const handleSubmit = async (e: React.FormEvent) => {
+        e.preventDefault();
+
+        await signUp.email({
+            email: email,
+            password: password,
+            name: name
+        },
+        {
+            onSuccess: () => {
+                console.log('done')
+                router.push('/dashboard');
+            },
+            onError: (ctx) => {
+                setError(ctx.error.message || "Something went wrong. Please try again.");
+            }
+        }
+    )
+    }
+
     return (
         <div className="min-h-screen flex items-center justify-center p-4 bg-background">
 
@@ -21,8 +56,7 @@ export default function RegisterPage() {
                 </CardHeader>
 
                 <CardContent>
-                    <form className="space-y-4">
-
+                    <form onSubmit={handleSubmit} className="space-y-4">
                         <div className="space-y-2">
                             <Label htmlFor="name" className="text-sm font-medium text-foreground">
                                 Full Name
@@ -33,6 +67,8 @@ export default function RegisterPage() {
                                 placeholder="full name"
                                 className="bg-background border-border text-foreground focus-visible:ring-primary"
                                 required
+                                value={name}
+                                onChange={(e) => setName(e.target.value)}
                             />
                         </div>
 
@@ -46,6 +82,8 @@ export default function RegisterPage() {
                                 placeholder="name@example.com"
                                 className="bg-background border-border text-foreground focus-visible:ring-primary"
                                 required
+                                value={email}
+                                onChange={(e) => setEmail(e.target.value)}
                             />
                         </div>
 
@@ -59,6 +97,8 @@ export default function RegisterPage() {
                                 placeholder="••••••••"
                                 className="bg-background border-border text-foreground focus-visible:ring-primary"
                                 required
+                                value={password}
+                                onChange={(e) => setPassword(e.target.value)}
                             />
                         </div>
 
@@ -72,6 +112,8 @@ export default function RegisterPage() {
                                 placeholder="••••••••"
                                 className="bg-background border-border text-foreground focus-visible:ring-primary"
                                 required
+                                value={confirmPassword}
+                                onChange={(e) => setConfirmPassword(e.target.value)}
                             />
                         </div>
 

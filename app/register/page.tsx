@@ -20,7 +20,7 @@ export default function RegisterPage() {
     const router = useRouter();
 
 
-    const handleSubmit = async (e: React.FormEvent) => {
+    const handleSubmit = async (e: React.SubmitEvent<HTMLFormElement>) => {
         e.preventDefault();
 
         setError("");

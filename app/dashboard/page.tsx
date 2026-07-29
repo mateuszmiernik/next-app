@@ -2,9 +2,20 @@ import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { auth } from '@/lib/auth';
+import { redirect } from 'next/navigation';
+import { headers } from 'next/headers';
 
 
-export default function DashboardPage() {
+export default async function DashboardPage() {
+    const session = await auth.api.getSession({
+        headers: await headers()
+    })
+
+    if (!session) {
+        redirect("/login");
+    }
+
     return (
         <div className="min-h-screen flex flex-col bg-background text-foreground p-6">
 

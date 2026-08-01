@@ -26,12 +26,12 @@ export default async function DashboardPage() {
                     <p className="text-xs text-muted-foreground">Welcome back, <span className="font-semibold text-primary">{session.user.name}!</span> Welcome to your analysis panel</p>
                 </div>
                 
-                <SignOutButton>
-                    test
-                </SignOutButton>
-                <Button variant="outline" size="sm">
-                    <Link href="/">← Back to Home</Link>
-                </Button>
+                <div className="flex align-center gap-3">
+                    <SignOutButton/>
+                    <Button variant="outline" size="sm">
+                        <Link href="/">← Back to Home</Link>
+                    </Button>
+                </div>
             </header>
 
             <main className="grow max-w-4xl w-full mx-auto space-y-6">

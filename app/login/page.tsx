@@ -15,7 +15,7 @@ export default function LoginPage() {
   const [password, setPassword] = useState("");
 
   const [error, setError] = useState("");
-  const [pending, setPending] = useState("");
+  const [pending, setPending] = useState(false);
 
   const handleSubmit = async (e: React.SubmitEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -29,7 +29,7 @@ export default function LoginPage() {
           router.push('/dashboard');
         },
         onError: (ctx) => {
-          setError(ctx.error.message) || "Invalid email or password."
+          setError(ctx.error.message || "Invalid email or password.");
           setPending(false);
         }
       }

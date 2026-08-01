@@ -25,7 +25,7 @@ export default function RegisterPage() {
 
         setError("");
 
-        if (password == !confirmPassword) {
+        if (password !== confirmPassword) {
             setError("Passwords do not match")
             return;
         }

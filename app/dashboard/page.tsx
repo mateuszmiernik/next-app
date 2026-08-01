@@ -5,6 +5,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { auth } from '@/lib/auth';
 import { redirect } from 'next/navigation';
 import { headers } from 'next/headers';
+import { SignOutButton } from'@/components/ui/SignOutButton';
 
 
 export default async function DashboardPage() {
@@ -22,15 +23,18 @@ export default async function DashboardPage() {
             <header className="flex justify-between items-center border-b border-border/40 pb-4 mb-8">
                 <div>
                     <h1 className="text-xl font-bold tracking-tight">Dashboard</h1>
-                    <p className="text-xs text-muted-foreground">Welcome back to your analysis panel</p>
+                    <p className="text-xs text-muted-foreground">Welcome back, <span className="font-semibold text-primary">{session.user.name}!</span> Welcome to your analysis panel</p>
                 </div>
-
+                
+                <SignOutButton>
+                    test
+                </SignOutButton>
                 <Button variant="outline" size="sm">
                     <Link href="/">← Back to Home</Link>
                 </Button>
             </header>
 
-            <main className="flex-grow max-w-4xl w-full mx-auto space-y-6">
+            <main className="grow max-w-4xl w-full mx-auto space-y-6">
                 <Card className="bg-card border-border shadow-xl">
                     <CardHeader>
                         <CardTitle className="text-lg font-semibold tracking-tight">
@@ -43,7 +47,7 @@ export default async function DashboardPage() {
 
                     <CardContent>
                         <form className="flex flex-col sm:flex-row gap-3">
-                            <div className="flex-grow">
+                            <div className="grow">
                                 <Input
                                     type="url"
                                     placeholder="https://example.com"

@@ -7,6 +7,8 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import Link from "next/link"
+import { loginSchema } from "@/schemas/auth";
+
 
 export default function LoginPage() {
   const router = useRouter();

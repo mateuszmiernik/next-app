@@ -7,6 +7,7 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { signUp } from '@/lib/auth-client';
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { registerSchema } from '@/schemas/auth';
 
 
 export default function RegisterPage() {

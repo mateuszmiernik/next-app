@@ -19,8 +19,31 @@ export default function LoginPage() {
   const [error, setError] = useState("");
   const [pending, setPending] = useState(false);
 
+  const [fieldErrors, setFieldErrors] = useState<{ email?: string, password?: string }>({});
+
   const handleSubmit = async (e: React.SubmitEvent<HTMLFormElement>) => {
     e.preventDefault();
+
+    setError("");
+    setFieldErrors({});
+
+    const result = loginSchema.safeParse({ email, password });
+
+    if (!result.success) {
+      const formattedErrors: { email?: string, password?: string }= {};
+
+      result.error.issues.forEach((issue) => {
+        const fieldName = issue.path[0] as "email" || "password";
+        formattedErrors[fieldName] = issue.message;
+      });
+
+      setFieldErrors(formattedErrors);
+      setPending(false);
+      return;
+    }
+
+    
+
 
     await signIn.email({
       email: email,

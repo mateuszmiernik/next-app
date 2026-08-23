@@ -17,30 +17,46 @@ export default function RegisterPage() {
     const [confirmPassword, setConfirmPassword] = useState("");
     const [error, setError] = useState("");
     const [pending, setPending] = useState(false);
+    const [fieldErrors, setFieldErrors] = useState<{
+        name?: string,
+        email?: string,
+        password?: string,
+        confirmPassword? :string
+    }>({});
 
     const router = useRouter();
-
 
     const handleSubmit = async (e: React.SubmitEvent<HTMLFormElement>) => {
         e.preventDefault();
 
         setError("");
+        setFieldErrors({});
+        setPending(true);
 
-        if (password !== confirmPassword) {
-            setError("Passwords do not match")
+        const result = registerSchema.safeParse({ name, email, password, confirmPassword });
+
+        console.log(result);
+
+        if (!result.success) {
+            const formattedErrors: typeof fieldErrors = {};
+
+            result.error.issues.forEach((issue) => {
+                const fieldName = issue.path[0] as keyof typeof fieldErrors;
+                formattedErrors[fieldName] = issue.message;
+            });
+            
+            setFieldErrors(formattedErrors);
+            setPending(false);
             return;
         }
 
-        setPending(true);
-
         await signUp.email({
-            email: email,
-            password: password,
-            name: name
-        },
+            email: result.data.email,
+            password: result.data.password,
+            name: result.data.name
+            },
             {
                 onSuccess: () => {
-                    console.log('done')
                     router.push('/dashboard');
                 },
                 onError: (ctx) => {
@@ -48,7 +64,7 @@ export default function RegisterPage() {
                     setPending(false);
                 }
             }
-        )
+        );
     }
 
     return (
@@ -81,11 +97,15 @@ export default function RegisterPage() {
                                 id="name"
                                 type="text"
                                 placeholder="full name"
-                                className="bg-background border-border text-foreground focus-visible:ring-primary"
-                                required
+                                className={`bg-background border-border text-foreground focus-visible:ring-primary ${fieldErrors.name ? "border-destructive focus-visible:ring-destructive" : ""}`}
                                 value={name}
                                 onChange={(e) => setName(e.target.value)}
                             />
+                            {fieldErrors.name && (
+                                <p className='text-xs font-medium text-destructive mt-1'>
+                                    {fieldErrors.name}
+                                </p>
+                            )}
                         </div>
 
                         <div className="space-y-2">
@@ -96,11 +116,15 @@ export default function RegisterPage() {
                                 id="email"
                                 type="email"
                                 placeholder="name@example.com"
-                                className="bg-background border-border text-foreground focus-visible:ring-primary"
-                                required
+                                className={`bg-background border-border text-foreground focus-visible:ring-primary ${fieldErrors.email ? "border-destructive focus-visible:ring-destructive" : ""}`}
                                 value={email}
                                 onChange={(e) => setEmail(e.target.value)}
                             />
+                            {fieldErrors.email && (
+                                <p className='text-xs font-medium text-destructive mt-1'>
+                                    {fieldErrors.email}
+                                </p>
+                            )}
                         </div>
 
                         <div className="space-y-2">
@@ -111,11 +135,16 @@ export default function RegisterPage() {
                                 id="password"
                                 type="password"
                                 placeholder="••••••••"
-                                className="bg-background border-border text-foreground focus-visible:ring-primary"
+                                className={`bg-background border-border text-foreground focus-visible:ring-primary ${fieldErrors.password ? "border-destructive focus-visible:ring-destructive" : ""}`}
                                 required
                                 value={password}
                                 onChange={(e) => setPassword(e.target.value)}
                             />
+                            {fieldErrors.password && (
+                                <p className='text-xs font-medium text-destructive mt-1'>
+                                    {fieldErrors.password}
+                                </p>
+                            )}
                         </div>
 
                         <div className="space-y-2">
@@ -126,14 +155,19 @@ export default function RegisterPage() {
                                 id="confirmPassword"
                                 type="password"
                                 placeholder="••••••••"
-                                className="bg-background border-border text-foreground focus-visible:ring-primary"
+                                className={`bg-background border-border text-foreground focus-visible:ring-primary ${fieldErrors.confirmPassword ? "border-destructive focus-visible:ring-destructive" : ""}`}
                                 required
                                 value={confirmPassword}
                                 onChange={(e) => setConfirmPassword(e.target.value)}
                             />
+                            {fieldErrors.confirmPassword && (
+                                <p className='text-xs font-medium text-destructive mt-1'>
+                                    {fieldErrors.confirmPassword}
+                                </p>
+                            )}
                         </div>
 
-                        <Button type="submit" disabled={pending} className="w-full mt-2 hover:shadow-[0_0_15px_rgba(244,63,94,0.4)] transition-all duration-300">
+                        <Button type="submit" disabled={pending} className="w-full mt-2 hover:shadow-[0_0_.9375rem_rgba(244,63,94,0.4)] transition-all duration-300">
                             {pending ? "Creating account..." : "Sign Up"}
                         </Button>
                     </form>

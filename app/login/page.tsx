@@ -30,9 +30,8 @@ export default function LoginPage() {
 
     const result = loginSchema.safeParse({ email, password });
 
-    console.log(result);
     if (!result.success) {
-      const formattedErrors: { email?: string, password?: string }= {};
+      const formattedErrors: { email?: string, password?: string } = {};
 
       result.error.issues.forEach((issue) => {
         const fieldName = issue.path[0] as "email" | "password";
@@ -46,7 +45,7 @@ export default function LoginPage() {
       await signIn.email({
       email: result.data.email,
       password: result.data.password
-    },
+      },
       {
         onSuccess: () => {
           router.push('/dashboard');
@@ -56,7 +55,7 @@ export default function LoginPage() {
           setPending(false);
         }
       }
-    )
+    );
   }
 
     return (

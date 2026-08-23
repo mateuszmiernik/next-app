@@ -24,16 +24,18 @@ export default function LoginPage() {
   const handleSubmit = async (e: React.SubmitEvent<HTMLFormElement>) => {
     e.preventDefault();
 
+    setPending(true);
     setError("");
     setFieldErrors({});
 
     const result = loginSchema.safeParse({ email, password });
 
+    console.log(result);
     if (!result.success) {
       const formattedErrors: { email?: string, password?: string }= {};
 
       result.error.issues.forEach((issue) => {
-        const fieldName = issue.path[0] as "email" || "password";
+        const fieldName = issue.path[0] as "email" | "password";
         formattedErrors[fieldName] = issue.message;
       });
 
@@ -41,13 +43,9 @@ export default function LoginPage() {
       setPending(false);
       return;
     }
-
-    
-
-
-    await signIn.email({
-      email: email,
-      password: password
+      await signIn.email({
+      email: result.data.email,
+      password: result.data.password
     },
       {
         onSuccess: () => {
@@ -90,11 +88,16 @@ export default function LoginPage() {
                   id="email"
                   type="email"
                   placeholder="name@example.com"
-                  className="bg-background border-border text-foreground focus:bg-background focus-visible:ring-primary"
-                  required
+                  className={`bg-background border-border text-foreground focus:bg-background focus-visible:ring-primary ${fieldErrors.email ? "border-destructive focus-visible:ring-destructive" : ""}`}
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                 />
+
+                {fieldErrors.email && (
+                  <p className="text-xs text-destructive font-medium mt-1">
+                    {fieldErrors.email}
+                  </p>
+                )}
               </div>
 
               <div className="space-y-2">
@@ -105,11 +108,15 @@ export default function LoginPage() {
                   id="password"
                   type="password"
                   placeholder=""
-                  className="bg-background border-border text-foreground focus-visible:ring-primary"
-                  required
+                  className={`bg-background border-border text-foreground focus-visible:ring-primary ${fieldErrors.password ? "border-destructive focus-visible:ring-destructive" : ""}`}
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                 />
+                {fieldErrors.password && (
+                  <p className="text-xs text-destructive font-medium mt-1">
+                    {fieldErrors.password}
+                  </p>
+                )}
               </div>
 
               <Button type="submit" disabled={pending} className="w-full mt-2 hover:shadow-[0_0_15px_rgba(244,63,94,0.4)] transition-all duration-300">

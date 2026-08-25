@@ -5,7 +5,8 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { auth } from '@/lib/auth';
 import { redirect } from 'next/navigation';
 import { headers } from 'next/headers';
-import { SignOutButton } from'@/components/ui/SignOutButton';
+import { SignOutButton } from '@/components/ui/SignOutButton';
+import { AnalyzerForm } from '@/app/dashboard/analyzer.form';
 
 
 export default async function DashboardPage() {
@@ -46,20 +47,7 @@ export default async function DashboardPage() {
                     </CardHeader>
 
                     <CardContent>
-                        <form className="flex flex-col sm:flex-row gap-3">
-                            <div className="grow">
-                                <Input
-                                    type="url"
-                                    placeholder="https://example.com"
-                                    className="w-full bg-background border-border text-foreground focus-visible:ring-primary h-10"
-                                    required
-                                />
-                            </div>
-
-                            <Button type="submit" className="h-10 px-6 font-semibold hover:shadow-[0_0_15px_rgba(244,63,94,0.4)] transition-all duration-300">
-                                Analyze
-                            </Button>
-                        </form>
+                        <AnalyzerForm />
                     </CardContent>
                 </Card>
 

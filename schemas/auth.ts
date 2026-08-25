@@ -25,8 +25,15 @@ export const registerSchema = z.object({
     confirmPassword: z
         .string()
         .min(1, "Email is required")
-})
+    })
     .refine((data) => data.password === data.confirmPassword, {
         message: "Passwords do not match",
         path: ["confirmPassword"]
-    })
+})
+
+export const urlSchema = z.object({
+    url: z
+        .string()
+        .min(1, "URL is required")
+        .url("Please enter a valid website address (e.g., https://example.com)")
+})

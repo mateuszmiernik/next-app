@@ -42,7 +42,7 @@ export function AnalyzerForm() {
                 {pending ? "Analyzing..." : "Analyze"}
             </Button>
             {error && (
-                <p className='block text-xs font-medium text-destructive mt-1'>
+                <p className="block text-xs font-medium text-destructive mt-1">
                     {error}
                 </p>
             )}

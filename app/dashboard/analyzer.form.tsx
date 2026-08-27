@@ -3,13 +3,14 @@ import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { urlSchema } from '@/schemas/auth';
+import { analyzeWebsiteAction } from '@/app/actions/analyze';
 
 export function AnalyzerForm() {
     const [urlValue, setUrlValue] = useState("")
     const [error, setError] = useState<string | null>(null);
     const [pending, setPending] = useState(false);
 
-    const handleAnalyze = (e: React.SubmitEvent<HTMLFormElement>) => {
+    const handleAnalyze = async (e: React.SubmitEvent<HTMLFormElement>) => {
         e.preventDefault();
         setError(null);
         setPending(true);
@@ -23,7 +24,13 @@ export function AnalyzerForm() {
             return;
         }
 
-        setPending(false);
+        try {
+            await analyzeWebsiteAction(urlValue);
+        } catch (error) {
+            setError('Error occured');
+        } finally {
+            setPending(false);
+        }
     }
 
     return (

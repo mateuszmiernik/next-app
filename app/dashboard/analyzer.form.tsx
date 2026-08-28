@@ -4,8 +4,10 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { urlSchema } from '@/schemas/auth';
 import { analyzeWebsiteAction } from '@/app/actions/analyze';
+import { useRouter } from 'next/navigation';
 
 export function AnalyzerForm() {
+    const router = useRouter();
     const [urlValue, setUrlValue] = useState("")
     const [error, setError] = useState<string | null>(null);
     const [pending, setPending] = useState(false);
@@ -20,17 +22,20 @@ export function AnalyzerForm() {
         if (!result.success) {
             setError(result.error.issues[0].message);
             setPending(false);
-            console.log(result.error.issues[0].message);
             return;
         }
 
-        try {
-            await analyzeWebsiteAction(urlValue);
-        } catch (error) {
-            setError('Error occured');
-        } finally {
+        const response = await analyzeWebsiteAction(result.data.url);
+
+        if (!response.success) {
+            setError(response.error || "Failed to analyze the website.")
             setPending(false);
+            return;
         }
+
+        setUrlValue("");
+        setPending(false);
+        router.refresh();
     }
 
     return (

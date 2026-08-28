@@ -3,6 +3,7 @@ import { Firecrawl } from 'firecrawl';
 import { auth } from '@/lib/auth';
 import { headers } from 'next/headers';
 import { urlSchema } from '@/schemas/auth';
+import { prisma } from '@/lib/prisma';
 
 const firecrawl = new Firecrawl({ apiKey: process.env.FIRECRAWL_API_KEY });
 
@@ -24,15 +25,25 @@ export async function analyzeWebsiteAction(urlValue: string) {
 
         const validUrl = validation.data.url;
 
+        const scrapeResult = await firecrawl.scrape(validUrl);
 
+        if (!scrapeResult || !scrapeResult.markdown) {
+            return { success: false, error: "Failed to fetch website content. Please verify if the link works." }
+        }
 
-        // console.log(validation);
-        // console.log(session);
+        const markdownContent = scrapeResult.markdown;
 
-        // const results = await firecrawl.search(urlValue, {limit: 5 });
-
+        const newProject = await prisma.project.create({
+            data: {
+                url: validUrl,
+                content: markdownContent,
+                userId: session.user.id
+            }
+        });
+         
+        return { success: true, projectId: newProject.id}
     } catch (error: any) {
         console.error("Critical Server Action error: ", error);
-        return;
+        return { success: false, error: "An internal server error occurred during the scraping process." };
     }
 }

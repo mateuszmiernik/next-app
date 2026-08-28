@@ -7,7 +7,7 @@ import { redirect } from 'next/navigation';
 import { headers } from 'next/headers';
 import { SignOutButton } from '@/components/ui/SignOutButton';
 import { AnalyzerForm } from '@/app/dashboard/analyzer.form';
-
+import { prisma } from '@/lib/prisma';
 
 export default async function DashboardPage() {
     const session = await auth.api.getSession({
@@ -17,6 +17,14 @@ export default async function DashboardPage() {
     if (!session) {
         redirect("/login");
     }
+
+    const totalProjects = await prisma.project.count();
+    const userProjects = await prisma.project.findMany({        
+            where: { userId: session.user.id },
+            orderBy: { createdAt: 'desc'}
+        });
+
+    console.log(userProjects);
 
     return (
         <div className="min-h-screen flex flex-col bg-background text-foreground p-6">
@@ -54,7 +62,7 @@ export default async function DashboardPage() {
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                     <div className="border border-border/40 rounded-xl p-4 bg-card/50">
                         <p className="text-xs text-muted-foreground font-medium">Recent Analyses</p>
-                        <p className="text-2xl font-bold mt-1 text-primary">0</p>
+                        <p className="text-2xl font-bold mt-1 text-primary">{totalProjects}</p>
                     </div>
                     <div className="border border-border/40 rounded-xl p-4 bg-card/50">
                         <p className="text-xs text-muted-foreground font-medium">Average Score</p>

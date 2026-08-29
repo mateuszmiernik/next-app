@@ -84,11 +84,22 @@ export default async function DashboardPage() {
                         ) : (
                             <div className="divide-y divide-border/40">
                                 {userProjects.map((project) => (
-                                    <div>
-                                        <p>{project.url}</p>
-                                        <p>
-                                            {new Date(project.createdAt).toLocaleDateString()}
-                                        </p>
+                                    <div id={project.id} className='flex justify-between items-center py-3 first:pt-0 last:pb-0'>
+                                        <div className='truncate max-w-[70%]'>
+                                            <p className='text-sm font-medium truncate text-foreground'>{project.url}</p>
+                                            <p className='text-xs text-muted-foreground'>
+                                                {new Date(project.createdAt).toLocaleDateString('en-GB', {
+                                                    day: 'numeric',
+                                                    month: 'short',
+                                                    year: 'numeric',
+                                                    hour: '2-digit',
+                                                    minute: '2-digit'
+                                                })}
+                                            </p>
+                                        </div>
+                                        <Button size="sm" variant="secondary" asChild>
+                                            <Link href={'/dashboard/${project.id}'}>View details</Link>
+                                        </Button>
                                     </div>
                                 ))}
                             </div>

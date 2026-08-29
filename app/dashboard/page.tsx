@@ -19,10 +19,10 @@ export default async function DashboardPage() {
     }
 
     const totalProjects = await prisma.project.count();
-    const userProjects = await prisma.project.findMany({        
-            where: { userId: session.user.id },
-            orderBy: { createdAt: 'desc'}
-        });
+    const userProjects = await prisma.project.findMany({
+        where: { userId: session.user.id },
+        orderBy: { createdAt: 'desc' }
+    });
 
     console.log(userProjects);
 
@@ -34,9 +34,9 @@ export default async function DashboardPage() {
                     <h1 className="text-xl font-bold tracking-tight">Dashboard</h1>
                     <p className="text-xs text-muted-foreground">Welcome back, <span className="font-semibold text-primary">{session.user.name}!</span> Welcome to your analysis panel</p>
                 </div>
-                
+
                 <div className="flex align-center gap-3">
-                    <SignOutButton/>
+                    <SignOutButton />
                     <Button variant="outline" size="sm">
                         <Link href="/">← Back to Home</Link>
                     </Button>
@@ -73,6 +73,28 @@ export default async function DashboardPage() {
                         <p className="text-2xl font-bold mt-1 text-emerald-400">Operational</p>
                     </div>
                 </div>
+
+                <Card>
+                    <CardHeader>
+                        <CardTitle>Analysis History</CardTitle>
+                    </CardHeader>
+                    <CardContent>
+                        {userProjects.length === 0 ? (
+                            <p>No analyses found yet. Paste your first link above!</p>
+                        ) : (
+                            <div className="divide-y divide-border/40">
+                                {userProjects.map((project) => (
+                                    <div>
+                                        <p>{project.url}</p>
+                                        <p>
+                                            {new Date(project.createdAt).toLocaleDateString()}
+                                        </p>
+                                    </div>
+                                ))}
+                            </div>
+                        )}
+                    </CardContent>
+                </Card>
             </main>
         </div>
     )

@@ -98,7 +98,7 @@ export default async function DashboardPage() {
                                             </p>
                                         </div>
                                         <Button size="sm" variant="secondary" asChild>
-                                            <Link href={'/dashboard/${project.id}'}>View details</Link>
+                                            <Link href={`/dashboard/${project.id}`}>View details</Link>
                                         </Button>
                                     </div>
                                 ))}

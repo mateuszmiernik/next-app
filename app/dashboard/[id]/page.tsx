@@ -5,6 +5,7 @@ import { prisma } from '@/lib/prisma';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import Link from "next/link";
+import { rateContentAction } from '@/app/actions/ai';
 
 
 interface DetailsPageProps {
@@ -35,7 +36,7 @@ export default async function ProjectDetailsPage({ params }: DetailsPageProps) {
 
     // console.log(id);
     // console.log(session);
-    console.log(project);
+    // console.log(project);
 
     return (
         <div className='min-h-screen bg-background text-foreground p-6'>
@@ -44,6 +45,16 @@ export default async function ProjectDetailsPage({ params }: DetailsPageProps) {
                     <Button variant="outline" size="sm">
                         <Link href="/dashboard">← Back to Dashboard</Link>
                     </Button>
+
+                    <form action={async () => {
+                        'use server'
+                        await rateContentAction(id);
+                    }}>
+                        <Button type='submit' variant='outline'>
+                            rate test
+                        </Button>
+                    </form>
+
                     <p className='text-xs text-muted-foreground'>Analyzed on: {new Date(project.createdAt).toLocaleDateString('en-GB', {
                         day: 'numeric',
                         month: 'short',

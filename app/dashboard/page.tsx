@@ -18,7 +18,9 @@ export default async function DashboardPage() {
         redirect("/login");
     }
 
-    const totalProjects = await prisma.project.count();
+    const totalProjects = await prisma.project.count({
+        where: { userId:session.user.id }
+    });
     const userProjects = await prisma.project.findMany({
         where: { userId: session.user.id },
         orderBy: { createdAt: 'desc' }
@@ -84,7 +86,7 @@ export default async function DashboardPage() {
                         ) : (
                             <div className="divide-y divide-border/40">
                                 {userProjects.map((project) => (
-                                    <div id={project.id} className='flex justify-between items-center py-3 first:pt-0 last:pb-0'>
+                                    <div key={project.id} className='flex justify-between items-center py-3 first:pt-0 last:pb-0'>
                                         <div className='truncate max-w-[70%]'>
                                             <p className='text-sm font-medium truncate text-foreground'>{project.url}</p>
                                             <p className='text-xs text-muted-foreground'>

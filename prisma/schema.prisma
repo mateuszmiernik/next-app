@@ -76,6 +76,8 @@ model Project {
   id        String    @id @default(cuid())
   url       String
   content   String
+  aiScore   Int?
+  aiReview  String?
   createdAt DateTime? @default(now())
 
   userId    String

@@ -1,8 +1,8 @@
 'use server'
-
 import { prisma } from '@/lib/prisma';
 import { auth } from '@/lib/auth';
 import { headers } from 'next/headers';
+import { revalidatePath }from 'next/cache';
 
 
 export async function rateContentAction(projectId: string) {
@@ -51,14 +51,22 @@ export async function rateContentAction(projectId: string) {
             });
 
             const data = await response.json();
-            console.log(data);
+
+            const aiResponseText = data.choices[0].message.content;
+            const aiJson = JSON.parse(aiResponseText);
+
+            const updateProject = await prisma.project.update({
+                where: { id: projectId },
+                data: {
+                    aiScore: aiJson.score,
+                    aiReview: aiJson.review
+                }
+            });
+
+            revalidatePath(`/dashboard/${projectId}`);
+            return { success: true };
     } catch (error) {
-        console.log('test');
+        console.error('OpenRouter error occured', error);
+        return { success: false, error: "AI failed to respond correctly." }
     }
-
-
-
-    // console.log(session);
-    // console.log(project);
-
 }

@@ -6,6 +6,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import Link from "next/link";
 import { rateContentAction } from '@/app/actions/ai';
+import { RateButton } from './RateButton';
 
 
 interface DetailsPageProps {
@@ -46,14 +47,16 @@ export default async function ProjectDetailsPage({ params }: DetailsPageProps) {
                         <Link href="/dashboard">← Back to Dashboard</Link>
                     </Button>
 
-                    <form action={async () => {
+                    {/* <form action={async () => {
                         'use server'
                         await rateContentAction(id);
                     }}>
                         <Button type='submit' variant='outline'>
                             rate test
                         </Button>
-                    </form>
+                    </form> */}
+
+                    <RateButton projectId={project.id}/>
 
                     <p className='text-xs text-muted-foreground'>Analyzed on: {new Date(project.createdAt).toLocaleDateString('en-GB', {
                         day: 'numeric',

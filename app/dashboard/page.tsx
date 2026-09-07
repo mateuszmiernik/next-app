@@ -21,6 +21,7 @@ export default async function DashboardPage() {
     const totalProjects = await prisma.project.count({
         where: { userId:session.user.id }
     });
+    
     const userProjects = await prisma.project.findMany({
         where: { userId: session.user.id },
         orderBy: { createdAt: 'desc' }

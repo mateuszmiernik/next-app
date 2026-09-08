@@ -39,8 +39,7 @@ export async function rateContentAction(projectId: string) {
                     messages: [
                         {
                             role: "system",
-                            content: "You are an SEO and web performance expert. Analyze the webpage text for readability. Return your response EXCLUSIVELY in JSON format: {\"score\": number_from_1_to_100, \"review\": \"a short summary in English up to 3 sentences\"}"
-                        },
+                            content: "You are an SEO and web performance expert. Analyze the webpage text for readability. Return your response EXCLUSIVELY as a raw JSON object. Do NOT include markdown code blocks, formatting, or metadata headers. Expected format: {\"score\": 85, \"review\": \"Your analysis here\"}"                        },
                         {
                             role: "user",
                             content: `Here is the scraped website content: \n\n${project.content}`
@@ -54,6 +53,11 @@ export async function rateContentAction(projectId: string) {
 
             const aiResponseText = data.choices[0].message.content;
             const aiJson = JSON.parse(aiResponseText);
+
+            if (!aiResponseText ||aiResponseText.includes("User Safety") || !aiResponseText.trim().startsWith("{")) {
+                console.error("Bad response from AI, received:", aiResponseText);
+                return { success: false, error: "The AI system returned an invalid data format. Please try again."}
+            }
 
             const updateProject = await prisma.project.update({
                 where: { id: projectId },

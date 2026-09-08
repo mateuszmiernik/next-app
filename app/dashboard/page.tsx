@@ -91,7 +91,7 @@ export default async function DashboardPage() {
                                         <div className='truncate max-w-[70%]'>
                                             <p className='text-sm font-medium truncate text-foreground'>{project.url}</p>
                                             <p className='text-xs text-muted-foreground'>
-                                                {new Date(project.createdAt).toLocaleDateString('en-GB', {
+                                                {new Date(project.createdAt || new Date()).toLocaleDateString('en-GB', {
                                                     day: 'numeric',
                                                     month: 'short',
                                                     year: 'numeric',
@@ -100,7 +100,7 @@ export default async function DashboardPage() {
                                                 })}
                                             </p>
                                         </div>
-                                        <Button size="sm" variant="secondary" asChild>
+                                        <Button size="sm" variant="secondary">
                                             <Link href={`/dashboard/${project.id}`}>View details</Link>
                                         </Button>
                                     </div>

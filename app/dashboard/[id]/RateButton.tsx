@@ -1,6 +1,7 @@
 'use client'
 
-import { useState, useRouter } from 'react';
+import { useState } from 'react';
+import { useRouter } from 'next/navigation';
 import { rateContentAction } from '@/app/actions/ai';
 import { Button } from '@/components/ui/button';
 import { router } from 'better-auth/api';
@@ -10,11 +11,11 @@ interface RateButtonProps {
 }
 
 export function RateButton({ projectId }: RateButtonProps) {
+    const router = useRouter();
     const [pending, setPending] = useState(false);
     const [error, setError] = useState('');
 
     const handleRate = async () => {
-        const router = useRouter();
         setPending(true);
         setError('');
 

@@ -46,19 +46,7 @@ export default async function ProjectDetailsPage({ params }: DetailsPageProps) {
                     <Button variant="outline" size="sm">
                         <Link href="/dashboard">← Back to Dashboard</Link>
                     </Button>
-
-                    {/* <form action={async () => {
-                        'use server'
-                        await rateContentAction(id);
-                    }}>
-                        <Button type='submit' variant='outline'>
-                            rate test
-                        </Button>
-                    </form> */}
-
-                    <RateButton projectId={project.id}/>
-
-                    <p className='text-xs text-muted-foreground'>Analyzed on: {new Date(project.createdAt).toLocaleDateString('en-GB', {
+                    <p className='text-xs text-muted-foreground'>Analyzed on: {new Date(project.createdAt || new Date()).toLocaleDateString('en-GB', {
                         day: 'numeric',
                         month: 'short',
                         year: 'numeric',
@@ -66,6 +54,38 @@ export default async function ProjectDetailsPage({ params }: DetailsPageProps) {
                         minute: '2-digit'
                     })}</p>
                 </div>
+
+                <Card>  
+                    <CardHeader>
+                        <CardTitle>
+                            OpenRouter AI Audit
+                        </CardTitle>
+                        <CardDescription>
+                            Get an automated SEO and readability score based on the scraped content.
+                        </CardDescription>
+                    </CardHeader>
+                    <CardContent>
+                        {project.aiScore !== null && project.aiScore !== undefined ? (
+                            <div className='flex flex-col md:flex-row gap-6 items-start md:items-center'>
+                                <div className='flex items-center justify-center w-16 h-16 rounded-xl bg-primary text-primary-foreground font-black text-sm shadow-inner shrink-0'>
+                                    {project.aiScore}/100
+                                </div>
+                                <div className='space-y-1'>
+                                    <p className="text-sm font-semibold text-foreground">AI Review Verdict:</p>
+                                    <p className="text-sm text-muted-foreground italic">"{project.aiReview}"</p>
+                                </div>
+                            </div>
+                            
+                        ) : (
+                            <div className='space-y-3'>
+                                <p className="text-sm text-muted-foreground">This content has not been evaluated by AI yet.</p>
+                                <RateButton projectId={project.id}/>
+                            </div>
+                        )}
+                    </CardContent>
+                </Card>
+
+        
 
                 <Card>
                     <CardHeader>
